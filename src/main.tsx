@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { WagmiConfig } from 'wagmi';
-import { bscTestnet } from 'wagmi/chains';
+import { bscTestnet, sepolia } from 'wagmi/chains';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
 import App from './App.tsx';
@@ -9,15 +9,17 @@ import './index.css';
 
 const projectId = '95e0569d4d728cf790282a208164662e';
 
-// Configure BSC Testnet
+// Configure Ethereum Testnet
 const bscTestnetCustom = {
-  ...bscTestnet,
+  ...sepolia,
   rpcUrls: {
     default: {
-      http: ['https://data-seed-prebsc-1-s1.binance.org:8545/']
+      http: ['https://ethereum-sepolia-rpc.publicnode.com']
+      // http: ['https://data-seed-prebsc-1-s1.binance.org:8545/']
     },
     public: {
-      http: ['https://data-seed-prebsc-1-s1.binance.org:8545/']
+      http: ['https://ethereum-sepolia-rpc.publicnode.com']
+      // http: ['https://data-seed-prebsc-1-s1.binance.org:8545/']
     }
   }
 };

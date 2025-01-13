@@ -8,7 +8,7 @@ const StakingStats = () => {
   const { address } = useAccount();
 
   // Get total staked for all schemes
-  const schemes = [1, 2, 3]; // Your scheme IDs
+  const schemes = [1, 2, 3, 4]; // Your scheme IDs
   const totalStaked = schemes.reduce((acc, schemeId) => {
     const { data: schemeTotal } = useContractRead({
       address: STAKING_CONTRACT_ADDRESS,

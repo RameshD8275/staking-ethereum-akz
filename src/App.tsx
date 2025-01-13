@@ -12,23 +12,23 @@ function App() {
   const stakingPlans = [
     {
       name: 'Bronze Staking Plan',
-      range: '20 AKZ - 1000 AKZ',
-      bonus: '3%',
-      period: 'Bi-Weekly (15 days)',
-      duration: '180 days',
-      totalBonus: '36%',
+      range: '100 AKZ - 1000 AKZ',
+      bonus: '0.15%',
+      period: 'Daily',
+      duration: '52 weeks',
+      totalBonus: '54.6%',
       theme: 'from-amber-600 to-amber-800',
-      minStake: 20,
+      minStake: 100,
       maxStake: 1000,
       schemeId: 1
     },
     {
       name: 'Silver Staking Plan',
       range: '1001 AKZ - 2000 AKZ',
-      bonus: '8%',
-      period: 'Monthly (30 days)',
-      duration: '270 days',
-      totalBonus: '72%',
+      bonus: '1.25%',
+      period: 'Weekly',
+      duration: '52 weeks',
+      totalBonus: '65%',
       theme: 'from-blue-600 to-blue-800',
       minStake: 1001,
       maxStake: 2000,
@@ -37,14 +37,26 @@ function App() {
     {
       name: 'Gold Staking Plan',
       range: '2001 AKZ - 5000 AKZ',
-      bonus: '30%',
-      period: 'Quarterly',
-      duration: '365 days',
-      totalBonus: '120%',
+      bonus: '3%',
+      period: 'Bi-Weekly(15 days)',
+      duration: '52 weeks',
+      totalBonus: '72%',
       theme: 'from-amber-500 to-yellow-600',
       minStake: 2001,
       maxStake: 5000,
       schemeId: 3
+    },
+    {
+      name: 'Diamond Staking Plan',
+      range: '2001 AKZ - 5000 AKZ',
+      bonus: '8%',
+      period: 'Monthly',
+      duration: '52 weeks',
+      totalBonus: '96%',
+      theme: 'from-white-500 to-blue-600',
+      minStake: 2001,
+      maxStake: 5000,
+      schemeId: 4
     }
   ];
 
@@ -101,7 +113,7 @@ function App() {
         </div>
 
         {activeTab === 'stake' ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {stakingPlans.map((plan, index) => (
               <StakingPlan 
                 key={index} 
