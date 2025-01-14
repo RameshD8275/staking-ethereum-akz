@@ -114,11 +114,35 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
             maxStake: _maxStake,
             stakeDuration: _stakeDuration,
             rewardDuration: _rewardDuration,
-            apy: _apy,
+            apy: _apy * 10,
             isActive: true
         });
 
         emit SchemeCreated(schemeCount, _minStake, _maxStake, _apy);
+    }
+
+    function setScheme(
+        uint256 _schemeId,
+        uint256 _minStake,
+        uint256 _maxStake,
+        uint256 _stakeDuration,
+        uint256 _rewardDuration,
+        uint256 _apy,
+        bool _isActive
+    ) external onlyOwner {
+        require(_minStake > 0, "Min stake must be > 0");
+        require(_maxStake > _minStake, "Max stake must be > min stake");
+        require(_stakeDuration > 0, "Stake duration must be > 0");
+        require(_rewardDuration > 0, "Reward duration must be > 0");
+        require(_apy > 0, "APY must be > 0");
+        
+        StakingScheme storage scheme = schemes[_schemeId];
+        scheme.minStake = _minStake;
+        scheme.maxStake = _maxStake;
+        scheme.stakeDuration = _stakeDuration;
+        scheme.rewardDuration = _rewardDuration;
+        scheme.apy = _apy * 10;
+        scheme.isActive = _isActive;
     }
 
     function stake(
