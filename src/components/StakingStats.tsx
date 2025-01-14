@@ -47,9 +47,8 @@ const StakingStats = () => {
       }
     })
     const { data: rewards } = useContractReads({ contracts: contractReads });
-
     rewards?.map((reward: any) => {
-      if(reward.status === 'Success')
+      if(reward.status === 'success')
         schemeRewards += Number(formatEther(reward.result as bigint));
     });
 

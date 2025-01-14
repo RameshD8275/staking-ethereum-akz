@@ -18,6 +18,7 @@ function App() {
       duration: '52 weeks',
       totalBonus: '54.6%',
       theme: 'from-amber-600 to-amber-800',
+      borderColor: 'border-amber-500',
       minStake: 100,
       maxStake: 1000,
       schemeId: 1
@@ -30,6 +31,7 @@ function App() {
       duration: '52 weeks',
       totalBonus: '65%',
       theme: 'from-blue-600 to-blue-800',
+      borderColor: 'border-blue-500',
       minStake: 1001,
       maxStake: 2000,
       schemeId: 2
@@ -42,6 +44,7 @@ function App() {
       duration: '52 weeks',
       totalBonus: '72%',
       theme: 'from-amber-500 to-yellow-600',
+      borderColor: 'border-yellow-500',
       minStake: 2001,
       maxStake: 5000,
       schemeId: 3
@@ -54,6 +57,7 @@ function App() {
       duration: '52 weeks',
       totalBonus: '96%',
       theme: 'from-white-500 to-blue-600',
+      borderColor: 'border-blue-500',
       minStake: 2001,
       maxStake: 5000,
       schemeId: 4
@@ -83,7 +87,7 @@ function App() {
 
         <StakingStats />
 
-        <div className="flex justify-center mb-8 space-x-4">
+        {/* <div className="flex justify-center mb-8 space-x-4">
           <button
             onClick={() => setActiveTab('stake')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
@@ -110,9 +114,9 @@ function App() {
               Rewards History
             </div>
           </button>
-        </div>
+        </div> */}
 
-        {activeTab === 'stake' ? (
+        {/* {activeTab === 'stake' ? ( */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {stakingPlans.map((plan, index) => (
               <StakingPlan 
@@ -122,9 +126,6 @@ function App() {
               />
             ))}
           </div>
-        ) : (
-          <RewardsHistory />
-        )}
       </div>
     </div>
   );

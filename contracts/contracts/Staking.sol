@@ -236,32 +236,6 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
 
         emit claimed(msg.sender, _schemeId, reward, _stakeIndex);
     }
-    function getExpiredDay(
-        uint256 _schemeId,
-        uint256 _stakeIndex
-    ) public view returns (uint256) {
-        Stake storage userStake = userStakes[msg.sender][_schemeId][
-            _stakeIndex
-        ];
-        return userStake.lockUntil;
-    }
-    function getRewardExpiredDay(
-        uint256 _schemeId,
-        uint256 _stakeIndex
-    ) public view returns (uint256) {
-        Stake storage userStake = userStakes[msg.sender][_schemeId][
-            _stakeIndex
-        ];
-        StakingScheme storage scheme = schemes[_schemeId];
-
-        uint256 timeStaked;
-        if (userStake.lockUntil > block.timestamp)
-            timeStaked = block.timestamp - userStake.lastRewardAt;
-        else timeStaked = userStake.lockUntil - userStake.lastRewardAt;
-
-        uint256 repeatReward = timeStaked / scheme.rewardDuration;
-        return userStake.lastRewardAt + scheme.rewardDuration * repeatReward;
-    }
     function emergencyWithdraw(
         uint256 _schemeId,
         uint256 _stakeIndex
