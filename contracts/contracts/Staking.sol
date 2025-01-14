@@ -544,6 +544,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         );
 
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
+        require(reward > 0, "Not Enough reward");
         uint256 totalAmount = userStake.amount + reward;
         userStake.lastRewardAt = block.timestamp;
         userStake.isActive = false;
@@ -578,6 +579,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         require((block.timestamp - userStake.lastRewardAt) > schemes[_schemeId].rewardDuration, "Reward duration not met");
         
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
+        require(reward > 0, "Not Enough reward");
         userStake.lastRewardAt = block.timestamp;
 
         require(stakingToken.transfer(msg.sender, reward), "Transfer failed");
