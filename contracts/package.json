@@ -20,6 +20,7 @@
     "hardhat-configs":"^1.0.2",
     "chai": "^4.2.0",
     "ethers": "^6.4.0",
+    "sleep-ts": "^0.1.1",
     "hardhat": "^2.22.6",
     "hardhat-gas-reporter": "^1.0.8",
     "solidity-coverage": "^0.8.0",

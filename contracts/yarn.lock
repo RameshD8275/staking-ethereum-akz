@@ -654,19 +654,6 @@
     "@nomicfoundation/solidity-analyzer-linux-x64-musl" "0.1.2"
     "@nomicfoundation/solidity-analyzer-win32-x64-msvc" "0.1.2"
 
-"@nomicsfoundation/hardhat-config@^1.5.9":
-  version "1.5.9"
-  resolved "https://registry.yarnpkg.com/@nomicsfoundation/hardhat-config/-/hardhat-config-1.5.9.tgz#f2ebabb10692330be17a47fabdc4cf47621551d7"
-  integrity sha512-I2aVCDjyfl7MhB3gDJyHAZ0o9wvc3QCmNEmdtI41/FkTAa6AqdGTPUYg2pFiUyHB+i8wlGvg/IKxA5QwOe5j0A==
-  dependencies:
-    axios "^1.5.1"
-    big.js "^5.2.2"
-    decimal.js-light "^2.5.0"
-    jsbi "^3.1.4"
-    tiny-invariant "^1.1.0"
-    tiny-warning "^1.0.3"
-    toformat "^2.0.0"
-
 "@openzeppelin/contracts@^5.0.2":
   version "5.0.2"
   resolved "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz"
@@ -2828,9 +2815,9 @@ ms@2.1.2:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-ms@^2.1.3:
+ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"
-  resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 ndjson@2.0.0:
@@ -3376,6 +3363,13 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+sleep-ts@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/sleep-ts/-/sleep-ts-0.1.1.tgz#f5521f2582628a1d981dff82c85aace56dd426cf"
+  integrity sha512-Mmdu56a80KmPVcdvpHtO4fMwkBYBx1ZtOTa1fxr7nn1HCpLDNTy8nN+XZ72hP68TraWiVh52PM/8MjMuI+r4Kw==
+  dependencies:
+    ms "^2.1.1"
 
 slice-ansi@^4.0.0:
   version "4.0.0"

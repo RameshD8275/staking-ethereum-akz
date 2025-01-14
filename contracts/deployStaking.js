@@ -1,6 +1,7 @@
 
 const { ethers, run, network } = require("hardhat");
 const hreconfig = require('hardhat-configs');
+const { sleep } = require('sleep-ts');
 
 const verify = async (address, parameter = []) => {
   console.log(`Veryfing ${address} ...`);
@@ -14,37 +15,37 @@ const verify = async (address, parameter = []) => {
 async function main() {
   // Get network data from Hardhat config (see hardhat.config.ts).
   
-  const networkName = network.name;
-  // Check if the network is supported.
-  console.log(`Deploying to ${networkName} network...`);
+  // const networkName = network.name;
+  // // Check if the network is supported.
+  // console.log(`Deploying to ${networkName} network...`);
 
-  console.log('deploying...');
-  const retVal = await hreconfig.hreInit(hre);
-  if (!retVal) {
-    console.log('hardhat init error!');
-    return false;
-  }
+  // console.log('deploying...');
+  // const retVal = await hreconfig.hreInit(hre);
+  // if (!retVal) {
+  //   console.log('hardhat init error!');
+  //   return false;
+  // }
 
-  await run('clean');
-  await run('compile');
-  console.log('hardhat init OK');
-  console.log('Compiled contracts...');
+  // await run('clean');
+  // await run('compile');
+  // console.log('hardhat init OK');
+  // console.log('Compiled contracts...');
 
-  const [deployer] = await ethers.getSigners();
+  // const [deployer] = await ethers.getSigners();
 
-  console.log("Deploying contracts with the account:", deployer.address);
+  // console.log("Deploying contracts with the account:", deployer.address);
 
-  const staking = await ethers.getContractFactory("Staking");
-  const stakingContract = await staking.connect(deployer).deploy('0x4ed3a5Cd4280B38B7e53D80aA4117eE498e37977');
-  await stakingContract.waitForDeployment();
+  // const staking = await ethers.getContractFactory("Staking");
+  // const stakingContract = await staking.connect(deployer).deploy('0xaa2663C73cda62b543356c3Dc7DDAC387856ca27');
+  // await stakingContract.waitForDeployment();
 
-  const deployedAddr = await stakingContract.getAddress();
-  console.log("StakingContract deployed at:", deployedAddr);
+  // const deployedAddr = await stakingContract.getAddress();
+  // console.log("StakingContract deployed at:", deployedAddr);
   
-  console.log('Verifying contract....')
-  await sleep(10000);
+  // console.log('Verifying contract....')
+  // await sleep(20000);
 
-  await verify(deployedAddr, ['0x4ed3a5Cd4280B38B7e53D80aA4117eE498e37977']);
+  await verify('0x18716E68D226C5DAf9Ec0612c28A7fE710f70861', ['0xaa2663C73cda62b543356c3Dc7DDAC387856ca27']);
   
   console.log("##### Contract verified");
 }
