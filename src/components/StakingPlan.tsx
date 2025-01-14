@@ -40,7 +40,10 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   const { address } = useAccount();
   const [isUnStaking, setIsUnStaking] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
-
+  const [rewardContract, setRewardContract] = useState([] as any[])
+  const [userStakes, setUserStakes] = useState([] as any[])
+  const [totalReward, setTotalReward] = useState(0)
+  const [rewardData, setRewardData] = useState([] as any[])
   // Get total staked amount
   const { data: totalStakedData } = useContractRead({
     address: STAKING_CONTRACT_ADDRESS,
@@ -50,7 +53,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     watch: true,
   });
 
-  // console.log('totalStakedData', totalStakedData, '\n');
   // Get user stakes
   const { data: userStakesData } = useContractRead({
     address: STAKING_CONTRACT_ADDRESS,
@@ -61,35 +63,46 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   });
 
   const totalStaked = totalStakedData ? formatEther(totalStakedData as bigint) : '0';
-  const userStakes = userStakesData as any[] || [];
-  // console.log('userStakesData', userStakesData, '\n');
-  let contractReads = [] as any[];
-  userStakes.map((stake: any, index: number) => {
-    if (stake.isActive) {
-      contractReads.push({
-        address: STAKING_CONTRACT_ADDRESS,
-        abi: STAKING_ABI,
-        functionName: 'calculateReward',
-        args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
-      });
-    }
-  });
+
+  useEffect(() => {
+    let tempContract = [] as any[];
+    const tempUser = userStakesData as any[] || [];
+    tempUser.map((stake: any, index: number) => {
+      if (stake.isActive) {
+        tempContract.push({
+          address: STAKING_CONTRACT_ADDRESS,
+          abi: STAKING_ABI,
+          functionName: 'calculateReward',
+          args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
+        });
+      }
+    });
+    setRewardContract(tempContract)
+    setUserStakes(tempUser)
+  }, [userStakesData])
+
   // if (schemeId == 1)
   //   console.log('contractReads', contractReads, '\n');
 
-  const { data: rewards } = useContractReads({ contracts: contractReads });
+  const { data: rewards } = useContractReads({ contracts: rewardContract });
+
+  useEffect(() => {
+    let tempRewardsData = rewards as any[];
+    let rewardData = [] as any[]; // rewardData per stake
+    let totalReward = 0;   // totalReward per scheme
+    tempRewardsData?.map((reward) => {
+      if (reward.status === 'success') {
+        rewardData.push(formatEther(reward.result as bigint));
+        totalReward += Number(formatEther(reward.result as bigint));
+      }
+    })
+    setRewardData(rewardData)
+    setTotalReward(totalReward)
+  }, [rewards])
 
   // Calculate total rewards across all schemes
-  let rewardsData = rewards as any[];
-  let rewardData = [] as any[]; // rewardData per stake
-  let totalReward = 0;   // totalReward per scheme
-  rewardsData?.map((reward) => {
-    if (reward.status === 'success') {
-      rewardData.push(formatEther(reward.result as bigint));
-      totalReward += Number(formatEther(reward.result as bigint));
-    }
-  })
-  const getErrorMessage = (data:any) => {
+  
+  const getErrorMessage = (data: any) => {
     if (!data || !data.message) return 'Transaction Failed';
     const temp1 = data.message.split('\n\n');
     if (temp1.length === 0) return 'Transaction Failed';
