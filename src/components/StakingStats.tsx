@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Coins, Clock, Percent, TrendingUp } from 'lucide-react';
 import { useAccount, useContractRead, useContractReads } from 'wagmi';
 import { formatEther } from 'viem';
@@ -6,54 +6,116 @@ import { STAKING_CONTRACT_ADDRESS, STAKING_ABI } from '../config/contracts';
 
 const StakingStats = () => {
   const { address } = useAccount();
-
+  const [totalStaked, setTotalStaked] = useState(0);
+  const [totalReward, setTotalReward] = useState(0);
+  const [rewardContracts, setRewardContracts] = useState([] as any[])
   // Get total staked for all schemes
-  const schemes = [1, 2, 3, 4]; // Your scheme IDs
-  const totalStaked = schemes.reduce((acc, schemeId) => {
-    const { data: schemeTotal } = useContractRead({
-      address: STAKING_CONTRACT_ADDRESS,
-      abi: STAKING_ABI,
-      functionName: 'getTotalStaked',
-      args: address ? [address, BigInt(schemeId)] : undefined,
-      watch: true,
-    });
+  const schemes = [1, 2, 3, 4];
+  const totalStakedContracts = [] as any[];
+  const userStakedContracts = [] as any[];
+  schemes.map((schemeId: number) => {
+    totalStakedContracts.push(
+      {
+        address: STAKING_CONTRACT_ADDRESS,
+        abi: STAKING_ABI,
+        functionName: 'getTotalStaked',
+        args: address ? [address, BigInt(schemeId)] : undefined,
+        watch: true,
+      }
+    )
 
-    return acc + (schemeTotal ? Number(formatEther(schemeTotal as bigint)) : 0);
-  }, 0);
+    userStakedContracts.push(
+      {
+        address: STAKING_CONTRACT_ADDRESS,
+        abi: STAKING_ABI,
+        functionName: 'getUserStakes',
+        args: address ? [address, BigInt(schemeId)] : undefined,
+        watch: true,
+      }
+    )
 
-  // Calculate total rewards across all schemes
-  const totalRewards = schemes.reduce((acc, schemeId) => {
-    const { data: userStakes } = useContractRead({
-      address: STAKING_CONTRACT_ADDRESS,
-      abi: STAKING_ABI,
-      functionName: 'getUserStakes',
-      args: address ? [address, BigInt(schemeId)] : undefined,
-      watch: true,
-    });
-    if (!userStakes) return acc;
+  })
 
-    const stakes = userStakes as any[];
-    let schemeRewards = 0;
-    let contractReads = [] as any[];
+  const { data: stakedData } = useContractReads({ contracts: totalStakedContracts })
+  const { data: userData } = useContractReads({ contracts: userStakedContracts })
 
-    stakes.map((stake: any, index: number) => {
-      if (stake.isActive) {
-        contractReads.push({
-          address: STAKING_CONTRACT_ADDRESS,
-          abi: STAKING_ABI,
-          functionName: 'calculateReward',
-          args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
-        });
+  useEffect(() => {
+    if (userData === undefined) return;
+    const tempRewardContract = [] as any[];
+    console.log('userData', userData)
+    userData?.map((data: any, index: number) => {
+      let numStakePerScheme = data?.result?.length;
+      
+      for (let i = 0; i < numStakePerScheme; i++) {
+        console.log('Nightfury',numStakePerScheme, data, BigInt(index), BigInt(i))
+        tempRewardContract.push(
+          {
+            address: STAKING_CONTRACT_ADDRESS,
+            abi: STAKING_ABI,
+            functionName: 'calculateReward',
+            args: address ? [address, BigInt(index + 1), BigInt(i)] : undefined,
+          }
+        )
       }
     })
-    const { data: rewards } = useContractReads({ contracts: contractReads });
-    rewards?.map((reward: any) => {
-      if(reward.status === 'success')
-        schemeRewards += Number(formatEther(reward.result as bigint));
-    });
+    setRewardContracts(tempRewardContract)
+  }, [userData])
 
-    return acc + schemeRewards;
-  }, 0);
+  const { data: rewards } = useContractReads({ contracts: rewardContracts })
+  useEffect(() => {
+    console.log('rewards', rewards);
+    let sumReward = 0;
+    rewards?.map((reward)=>{
+      sumReward += Number(formatEther(reward.result as bigint));
+    })
+    setTotalReward(sumReward)
+  }, [rewards])
+
+  useEffect(() => {
+    if (stakedData === undefined) return;
+    let sum = 0;
+    stakedData?.forEach((data) => {
+      if (data.result !== undefined)
+        sum += Number(formatEther(data.result as bigint));
+    })
+    setTotalStaked(sum);
+  }, [stakedData])
+
+
+  // const totalRewards = schemes.reduce((acc, schemeId) => {
+  //   if(!address) return 0;
+  //   const { data: userStakes } = useContractRead({
+  //     address: STAKING_CONTRACT_ADDRESS,
+  //     abi: STAKING_ABI,
+  //     functionName: 'getUserStakes',
+  //     args: address ? [address, BigInt(schemeId)] : undefined,
+  //     watch: true,
+  //   });
+  //   if (!userStakes) return acc;
+
+  //   const stakes = userStakes as any[] || [];
+  //   let schemeRewards = 0;
+  //   let contractReads = [] as any[];
+
+  //   stakes?.map((stake: any, index: number) => {
+  //     if (stake.isActive) {
+  //       contractReads.push({
+  //         address: STAKING_CONTRACT_ADDRESS,
+  //         abi: STAKING_ABI,
+  //         functionName: 'calculateReward',
+  //         args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
+  //       });
+  //     }
+  //   })
+  //   const { data: rewards } = useContractReads({ contracts: contractReads });
+  //   rewards?.map((reward: any) => {
+  //     if(reward.status === 'success')
+  //       schemeRewards += Number(formatEther(reward.result as bigint));
+  //   });
+
+  //   return acc + schemeRewards;
+  // }, 0);
+  const totalRewards = 0;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
@@ -64,7 +126,7 @@ const StakingStats = () => {
           </div>
           <h3 className="text-lg font-semibold text-white">Total Staked</h3>
         </div>
-        <p className="text-2xl font-bold text-white">{totalStaked.toFixed(2)} AKZ</p>
+        <p className="text-2xl font-bold text-white">{totalStaked} AKZ</p>
         <p className="text-sm text-gray-400 mt-1">≈ ${(totalStaked * 0.1).toFixed(2)} USD</p>
       </div>
 
@@ -75,7 +137,7 @@ const StakingStats = () => {
           </div>
           <h3 className="text-lg font-semibold text-white">Total Rewards</h3>
         </div>
-        <p className="text-2xl font-bold text-white">{totalRewards.toFixed(2)} AKZ</p>
+        <p className="text-2xl font-bold text-white">{totalReward.toFixed(4)} AKZ</p>
         <p className="text-sm text-gray-400 mt-1">Lifetime earnings</p>
       </div>
 

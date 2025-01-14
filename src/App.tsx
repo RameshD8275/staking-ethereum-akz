@@ -4,10 +4,12 @@ import StakingPlan from './components/StakingPlan';
 import ConnectWallet from './components/ConnectWallet';
 import StakingStats from './components/StakingStats';
 import RewardsHistory from './components/RewardsHistory';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const [activeTab, setActiveTab] = useState('stake');
+  // const [activeTab, setActiveTab] = useState('stake');
 
   const stakingPlans = [
     {
@@ -65,7 +67,9 @@ function App() {
   ];
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900">
+      <ToastContainer />
       <div className="fixed top-0 right-0 p-4 z-50">
         <ConnectWallet 
           isConnected={isWalletConnected} 

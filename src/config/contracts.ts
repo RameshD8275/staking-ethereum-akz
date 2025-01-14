@@ -1,4 +1,4 @@
-export const STAKING_CONTRACT_ADDRESS = "0x1917df60c32B13a814ADC536313630bA9CD9ef9E";
+export const STAKING_CONTRACT_ADDRESS = "0xBa077f30BaDb144e8e339106ebA6ee655b3cd97a";
 export const TOKEN_CONTRACT_ADDRESS = "0x4ed3a5Cd4280B38B7e53D80aA4117eE498e37977";
 
 export const TOKEN_ABI = [
@@ -1055,54 +1055,6 @@ export const STAKING_ABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_schemeId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_stakeIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "getExpiredDay",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_schemeId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_stakeIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "getRewardExpiredDay",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_user",
         "type": "address"
@@ -1215,13 +1167,6 @@ export const STAKING_ABI = [
   },
   {
     "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "schemeCount",
     "outputs": [
       {
@@ -1286,6 +1231,49 @@ export const STAKING_ABI = [
       },
       {
         "internalType": "uint256",
+        "name": "_minStake",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxStake",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_stakeDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_rewardDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_apy",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isActive",
+        "type": "bool"
+      }
+    ],
+    "name": "setScheme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_schemeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
       }
@@ -1330,19 +1318,6 @@ export const STAKING_ABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

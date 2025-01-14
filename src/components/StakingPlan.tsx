@@ -50,7 +50,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     watch: true,
   });
 
-
+  // console.log('totalStakedData', totalStakedData, '\n');
   // Get user stakes
   const { data: userStakesData } = useContractRead({
     address: STAKING_CONTRACT_ADDRESS,
@@ -62,9 +62,8 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
 
   const totalStaked = totalStakedData ? formatEther(totalStakedData as bigint) : '0';
   const userStakes = userStakesData as any[] || [];
-
+  // console.log('userStakesData', userStakesData, '\n');
   let contractReads = [] as any[];
-
   userStakes.map((stake: any, index: number) => {
     if (stake.isActive) {
       contractReads.push({
@@ -90,6 +89,13 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       totalReward += Number(formatEther(reward.result as bigint));
     }
   })
+  const getErrorMessage = (data:any) => {
+    if (!data || !data.message) return 'Transaction Failed';
+    const temp1 = data.message.split('\n\n');
+    if (temp1.length === 0) return 'Transaction Failed';
+    const temp2 = temp1[0].split(':\n');
+    return temp2[temp2.length - 1];
+  };
 
   const { data: approveData, write: approve } = useContractWrite({
     address: TOKEN_CONTRACT_ADDRESS,
@@ -101,18 +107,28 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     address: STAKING_CONTRACT_ADDRESS,
     abi: STAKING_ABI,
     functionName: 'stake',
+    onError(err) {
+      toast.error(getErrorMessage(err));
+    }
   });
 
   const { data: UnstakeData, write: unstake } = useContractWrite({
     address: STAKING_CONTRACT_ADDRESS,
     abi: STAKING_ABI,
     functionName: 'unstake',
+    onError(err) {
+      toast.error(getErrorMessage(err));
+    }
   });
 
   const { data: claimData, write: claim } = useContractWrite({
     address: STAKING_CONTRACT_ADDRESS,
     abi: STAKING_ABI,
     functionName: 'claim',
+    onError(err) {
+      console.log('claim', err)
+      toast.error(getErrorMessage(err));
+    }
   });
 
   const { isLoading: isApproving } = useWaitForTransaction({
@@ -132,10 +148,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       toast.success("Staking is done successfully!");
       setAmount('');
     },
-    onError(error) {
-      console.error('Staking error:', error);
-      setError('Failed to stake tokens');
-    }
   });
 
   const { isLoading: unstaking } = useWaitForTransaction({
@@ -145,11 +157,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       setIsUnStaking(false);
       setIsClaiming(false);
     },
-    onError(error) {
-      if (error?.message)
-        toast.error(error?.message);
-      setError('Failed to Unstake tokens');
-    }
+
   });
 
   const { isLoading: claiming } = useWaitForTransaction({
@@ -158,11 +166,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       toast.success("Claiming is done successfully!");
       setIsClaiming(false);
     },
-    onError(error) {
-      if (error?.message)
-        toast.error(error?.message);
-      setError('Failed to Claim tokens');
-    }
   });
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -307,7 +310,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
         </div>
 
         <div className="pt-6 border-t border-navy-700/50">
-          {Number(totalStaked) > 0 && (
+          {
             <div className="mb-6 space-y-4">
               <div className="p-4 bg-navy-700/30 rounded-lg">
                 <div className="flex items-center justify-between">
@@ -322,7 +325,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                     <Sparkles className="w-5 h-5 text-amber-400 mr-2" />
                     <span className="text-gray-400">Total Reward:</span>
                   </div>
-                  <span className="text-white font-bold">{Number(totalReward).toFixed(2)} AKZ</span>
+                  <span className="text-white font-bold">{Number(totalReward).toFixed(4)} AKZ</span>
                 </div>
               </div>
               <div className="flex items-center justify-center space-x-2 mb-6">
@@ -338,6 +341,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                       type="number"
                       value={amount}
                       onChange={handleAmountChange}
+                      dir='rtl'
                       placeholder="Enter amount to stake"
                       className="w-full px-4 py-3 bg-navy-700/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all duration-200"
                     />
@@ -384,7 +388,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Reward Amount:
                           </span>
                           <span className="text-white font-medium">
-                            {rewardData[index]} AKZ
+                            {Number(rewardData[index]).toFixed(4)} AKZ
                           </span>
                         </div>
                         <div className='flex justify-between'>
@@ -403,7 +407,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             {convertTimestamp(Number(stake.lastRewardAt) + 86400 * getPeriodInDays(period), 'claim')}
                           </span>
                         </div>
-                        <div className='flex justify-between'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 justify-between gap-2 mt-2'>
                           <button
                             onClick={() => handleUnStake(index)}
                             disabled={isUnStaking}
@@ -437,11 +441,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                 </div>
               )}
             </div>
-          )}
-
-
-
-
+          }
         </div>
       </div>
     </div>
