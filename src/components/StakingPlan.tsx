@@ -65,7 +65,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   const totalStaked = totalStakedData ? formatEther(totalStakedData as bigint) : '0';
 
   useEffect(() => {
-    let tempContract = [] as any[];
+    const tempContract = [] as any[];
     const tempUser = userStakesData as any[] || [];
     tempUser.map((stake: any, index: number) => {
       if (stake.isActive) {
@@ -81,14 +81,11 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     setUserStakes(tempUser)
   }, [userStakesData])
 
-  // if (schemeId == 1)
-  //   console.log('contractReads', contractReads, '\n');
-
   const { data: rewards } = useContractReads({ contracts: rewardContract });
 
   useEffect(() => {
-    let tempRewardsData = rewards as any[];
-    let rewardData = [] as any[]; // rewardData per stake
+    const tempRewardsData = rewards as any[];
+    const rewardData = [] as any[]; // rewardData per stake
     let totalReward = 0;   // totalReward per scheme
     tempRewardsData?.map((reward) => {
       if (reward.status === 'success') {
