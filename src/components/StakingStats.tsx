@@ -1,6 +1,6 @@
 import React from 'react';
 import { Coins, Clock, Percent, TrendingUp } from 'lucide-react';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount, useContractRead, useContractReads } from 'wagmi';
 import { formatEther } from 'viem';
 import { STAKING_CONTRACT_ADDRESS, STAKING_ABI } from '../config/contracts';
 
@@ -17,7 +17,7 @@ const StakingStats = () => {
       args: address ? [address, BigInt(schemeId)] : undefined,
       watch: true,
     });
-    
+
     return acc + (schemeTotal ? Number(formatEther(schemeTotal as bigint)) : 0);
   }, 0);
 
@@ -30,26 +30,27 @@ const StakingStats = () => {
       args: address ? [address, BigInt(schemeId)] : undefined,
       watch: true,
     });
-
     if (!userStakes) return acc;
 
     const stakes = userStakes as any[];
     let schemeRewards = 0;
+    let contractReads = [] as any[];
 
-    stakes.forEach((stake: any, index: number) => {
+    stakes.map((stake: any, index: number) => {
       if (stake.isActive) {
-        const { data: reward } = useContractRead({
+        contractReads.push({
           address: STAKING_CONTRACT_ADDRESS,
           abi: STAKING_ABI,
           functionName: 'calculateReward',
           args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
-          watch: true,
         });
-
-        if (reward) {
-          schemeRewards += Number(formatEther(reward as bigint));
-        }
       }
+    })
+    const { data: rewards } = useContractReads({ contracts: contractReads });
+
+    rewards?.map((reward: any) => {
+      if(reward.status === 'Success')
+        schemeRewards += Number(formatEther(reward.result as bigint));
     });
 
     return acc + schemeRewards;
