@@ -239,7 +239,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
         return 1;
       case 'Weekly':
         return 7;
-      case 'Bi-Weekly':
+      case 'Bi-Weekly(15 days)':
         return 15;
       case 'Monthly':
         return 30;
