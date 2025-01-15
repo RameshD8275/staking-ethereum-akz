@@ -84,41 +84,6 @@ const StakingStats = () => {
   }, [stakedData])
 
 
-  // const totalRewards = schemes.reduce((acc, schemeId) => {
-  //   if(!address) return 0;
-  //   const { data: userStakes } = useContractRead({
-  //     address: STAKING_CONTRACT_ADDRESS,
-  //     abi: STAKING_ABI,
-  //     functionName: 'getUserStakes',
-  //     args: address ? [address, BigInt(schemeId)] : undefined,
-  //     watch: true,
-  //   });
-  //   if (!userStakes) return acc;
-
-  //   const stakes = userStakes as any[] || [];
-  //   let schemeRewards = 0;
-  //   let contractReads = [] as any[];
-
-  //   stakes?.map((stake: any, index: number) => {
-  //     if (stake.isActive) {
-  //       contractReads.push({
-  //         address: STAKING_CONTRACT_ADDRESS,
-  //         abi: STAKING_ABI,
-  //         functionName: 'calculateReward',
-  //         args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
-  //       });
-  //     }
-  //   })
-  //   const { data: rewards } = useContractReads({ contracts: contractReads });
-  //   rewards?.map((reward: any) => {
-  //     if(reward.status === 'success')
-  //       schemeRewards += Number(formatEther(reward.result as bigint));
-  //   });
-
-  //   return acc + schemeRewards;
-  // }, 0);
-  const totalRewards = 0;
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
       <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">

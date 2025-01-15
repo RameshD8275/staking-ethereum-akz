@@ -513,17 +513,29 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
 
         if (!userStake.isActive) return 0;
 
+        uint256 reward = (userStake.amount * scheme.apy * _getRepeatNumberOfPeriods(_user, _schemeId, _stakeIndex)) /
+            ((100 * 10 * 365 days) / scheme.rewardDuration);
+        return reward;
+    }
+
+    function _getRepeatNumberOfPeriods(
+        address _user,
+        uint256 _schemeId,
+        uint256 _stakeIndex
+    ) internal view returns (uint256) {
+        Stake storage userStake = userStakes[_user][_schemeId][_stakeIndex];
+        StakingScheme storage scheme = schemes[_schemeId];
         uint256 timeStaked;
         if (userStake.startTime + scheme.stakeDuration > block.timestamp)
             timeStaked = block.timestamp - userStake.lastRewardAt;
-        else timeStaked = userStake.startTime + scheme.stakeDuration - userStake.lastRewardAt;
-
-        if (timeStaked < scheme.rewardDuration) return 0;
+        else
+            timeStaked =
+                userStake.startTime +
+                scheme.stakeDuration -
+                userStake.lastRewardAt;
 
         uint256 periods = timeStaked / scheme.rewardDuration;
-        uint256 reward = (userStake.amount * scheme.apy * periods) /
-            ((100 * 10 * 365 days) / scheme.rewardDuration);
-        return reward;
+        return periods;
     }
 
     function unstake(
@@ -545,10 +557,12 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         );
 
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
-        require(reward > 0, "Not Enough reward");
+        
         uint256 totalAmount = userStake.amount + reward;
-        userStake.lastRewardAt = block.timestamp;
+
+        userStake.lastRewardAt = scheme.stakeDuration + userStake.startTime;
         userStake.isActive = false;
+
         totalUserStakesByScheme[msg.sender][_schemeId] -= userStake.amount;
 
         require(
@@ -576,12 +590,18 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         Stake storage userStake = userStakes[msg.sender][_schemeId][
             _stakeIndex
         ];
+        StakingScheme storage scheme = schemes[_schemeId];
         require(userStake.isActive, "No active stake");
-        require((block.timestamp - userStake.lastRewardAt) > schemes[_schemeId].rewardDuration, "Reward duration not met");
-        
+        require(userStake.lastRewardAt != scheme.stakeDuration + userStake.startTime, "Staking Period has expired");
+        require(
+            (block.timestamp - userStake.lastRewardAt) >
+                scheme.rewardDuration,
+            "Reward duration not met"
+        );
+
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
         require(reward > 0, "Not Enough reward");
-        userStake.lastRewardAt = block.timestamp;
+        userStake.lastRewardAt += _getRepeatNumberOfPeriods(msg.sender, _schemeId, _stakeIndex) * scheme.rewardDuration;
 
         require(stakingToken.transfer(msg.sender, reward), "Transfer failed");
 

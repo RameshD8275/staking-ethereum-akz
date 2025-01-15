@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { clsx } from 'clsx';
 import { Clock, Percent, Coins, AlertCircle, Sparkles, History } from 'lucide-react';
 import { useAccount, useContractWrite, useWaitForTransaction, useContractRead, useContractReads } from 'wagmi';
@@ -38,12 +38,13 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
   const { address } = useAccount();
-  const [isUnStaking, setIsUnStaking] = useState(false);
-  const [isClaiming, setIsClaiming] = useState(false);
   const [rewardContract, setRewardContract] = useState([] as any[])
   const [userStakes, setUserStakes] = useState([] as any[])
   const [totalReward, setTotalReward] = useState(0)
   const [rewardData, setRewardData] = useState([] as any[])
+  const [stakeID, setStakeID] = useState(-1)
+  // const [isClaimed, setClaimed] = useState([] as boolean[])
+  // const [isStaked, setUnStaked] = useState([] as boolean[])
   // Get total staked amount
   const { data: totalStakedData } = useContractRead({
     address: STAKING_CONTRACT_ADDRESS,
@@ -63,7 +64,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   });
 
   const totalStaked = totalStakedData ? formatEther(totalStakedData as bigint) : '0';
-
   useEffect(() => {
     const tempContract = [] as any[];
     const tempUser = userStakesData as any[] || [];
@@ -164,8 +164,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     hash: UnstakeData?.hash,
     onSuccess() {
       toast.success("Unstaking is done successfully!");
-      setIsUnStaking(false);
-      setIsClaiming(false);
     },
 
   });
@@ -174,7 +172,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     hash: claimData?.hash,
     onSuccess() {
       toast.success("Claiming is done successfully!");
-      setIsClaiming(false);
     },
   });
 
@@ -208,6 +205,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   };
 
   const handleUnStake = async (index: number) => {
+    setStakeID(index)
     if (!error && address) {
       try {
         unstake({
@@ -220,6 +218,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     }
   };
   const handleClaim = async (index: number) => {
+    setStakeID(index)
     if (!error && address) {
       try {
         claim({
@@ -246,6 +245,16 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
         return 1;
     }
   }
+
+  // useEffect(()=>{
+  //   const timer = setTimeout(() => {
+      
+  //   }, 5000); // 5 seconds delay
+
+  //   // Cleanup function
+  //   return () => clearTimeout(timer);
+  // }, []);
+
   function convertTimestamp(timestamp: number, locklevel: string): string {
     var d = new Date(timestamp * 1000), // Convert the passed timestamp to milliseconds
       yyyy = d.getFullYear(),
@@ -257,13 +266,19 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       ampm = "AM",
       time;
 
-    var now = new Date();
-    if (now.getFullYear() > yyyy && now.getMonth() > d.getMonth() && now.getDate() > d.getDate() && now.getHours() > d.getHours() && now.getMinutes() > d.getMinutes()) {
-      if (locklevel == 'unstake')
-        setIsUnStaking(true);
-      else if (locklevel == 'claim')
-        setIsClaiming(true);
-    }
+    // var now = new Date();
+    // if (now.getFullYear() < yyyy && now.getMonth() < d.getMonth() && now.getDate() < d.getDate() && now.getHours() < d.getHours() && now.getMinutes() < d.getMinutes()) {
+    //   if (locklevel == 'unstake')
+    //     setIsUnStaking(false);
+    //   else if (locklevel == 'claim')
+    //     setIsClaiming(false);
+    // }
+    // else{
+    //   if (locklevel == 'unstake')
+    //     setIsUnStaking(true);
+    //   else if (locklevel == 'claim')
+    //     setIsClaiming(true);
+    // }
 
     if (hh > 12) {
       h = hh - 12;
@@ -413,35 +428,35 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Claim Time:
                           </span>
                           <span className="text-white font-medium">
-                            {convertTimestamp(Number(stake.lastRewardAt) + 600, 'claim')}
+                            {(Number(stake.lastRewardAt) !== Number(stake.startTime) + 3600) ? convertTimestamp(Number(stake.lastRewardAt) + 600, 'claim') : "can't claim"}
                           </span>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 justify-between gap-2 mt-2'>
                           <button
                             onClick={() => handleUnStake(index)}
-                            disabled={isUnStaking}
+                            // disabled={isUnStaked}
                             className={clsx(
                               "w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300",
                               "transform hover:translate-y-[-2px]",
-                              isUnStaking
-                                ? "bg-navy-600 text-gray-400 cursor-not-allowed"
-                                : "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-900 shadow-lg shadow-amber-500/20"
+                              // isUnStaked
+                                // ?"bg-navy-600 text-gray-400 cursor-not-allowed"
+                                "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-900 shadow-lg shadow-amber-500/20"
                             )}
                           >
-                            {unstaking ? 'UnStaking...' : 'UnStake'}
+                            {unstaking && stakeID === index? 'UnStaking...' : 'UnStake'}
                           </button>
                           <button
                             onClick={() => handleClaim(index)}
-                            disabled={isClaiming}
+                            // disabled={isClaimed}
                             className={clsx(
                               "w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300",
                               "transform hover:translate-y-[-2px]",
-                              isClaiming
-                                ? "bg-navy-600 text-gray-400 cursor-not-allowed"
-                                : "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-900 shadow-lg shadow-amber-500/20"
+                              // isClaimed
+                                // ? "bg-navy-600 text-gray-400 cursor-not-allowed"
+                                "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-900 shadow-lg shadow-amber-500/20"
                             )}
                           >
-                            {claiming ? 'Claiming...' : 'Claim'}
+                            {claiming && stakeID === index ? 'Claiming...' : 'Claim'}
                           </button>
                         </div>
                       </div>
