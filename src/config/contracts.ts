@@ -1,4 +1,4 @@
-export const STAKING_CONTRACT_ADDRESS = "0x18716E68D226C5DAf9Ec0612c28A7fE710f70861";
+export const STAKING_CONTRACT_ADDRESS = "0xd08b84d4E2b514E0a1CB32Ae5c67522256543E0B";
 export const TOKEN_CONTRACT_ADDRESS = "0xaa2663C73cda62b543356c3Dc7DDAC387856ca27";
 
 export const TOKEN_ABI = [
@@ -800,7 +800,7 @@ export const STAKING_ABI = [
           },
           {
             "internalType": "uint256",
-            "name": "lockUntil",
+            "name": "startTime",
             "type": "uint256"
           },
           {
@@ -1072,7 +1072,7 @@ export const STAKING_ABI = [
       },
       {
         "internalType": "uint256",
-        "name": "lockUntil",
+        "name": "startTime",
         "type": "uint256"
       },
       {

@@ -63,10 +63,12 @@ const StakingStats = () => {
 
   const { data: rewards } = useContractReads({ contracts: rewardContracts })
   useEffect(() => {
+    if (rewards === undefined) return;
     console.log('rewards', rewards);
     let sumReward = 0;
     rewards?.map((reward)=>{
-      sumReward += Number(formatEther(reward.result as bigint));
+      if(reward.result !== undefined)
+        sumReward += Number(formatEther(reward.result as bigint));
     })
     setTotalReward(sumReward)
   }, [rewards])

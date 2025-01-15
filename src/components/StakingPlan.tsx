@@ -232,8 +232,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     }
   };
 
-
-  function getPeriodInDays(duration: string): number {
+  function getRewardPeriodInDays(duration: string): number {
     switch (duration) {
       case 'Daily':
         return 1;
@@ -263,7 +262,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
       if (locklevel == 'unstake')
         setIsUnStaking(true);
       else if (locklevel == 'claim')
-        setIsUnStaking(true);
+        setIsClaiming(true);
     }
 
     if (hh > 12) {
@@ -406,7 +405,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Unstake Time:
                           </span>
                           <span className="text-white font-medium">
-                            {convertTimestamp(Number(stake.lockUntil), 'unstake')}
+                            {convertTimestamp(Number(stake.startTime) + 3600, 'unstake')}  
                           </span>
                         </div>
                         <div className='flex justify-between'>
@@ -414,7 +413,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Claim Time:
                           </span>
                           <span className="text-white font-medium">
-                            {convertTimestamp(Number(stake.lastRewardAt) + 86400 * getPeriodInDays(period), 'claim')}
+                            {convertTimestamp(Number(stake.lastRewardAt) + 600, 'claim')}
                           </span>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 justify-between gap-2 mt-2'>

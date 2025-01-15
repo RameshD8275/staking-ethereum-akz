@@ -344,7 +344,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
     struct Stake {
         uint256 amount;
         uint256 lastRewardAt;
-        uint256 lockUntil;
+        uint256 startTime;
         uint256 schemeId;
         bool isActive;
         uint256 stakeIndex;
@@ -395,7 +395,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         schemes[2] = StakingScheme({
             minStake: 1001 * 10 ** 18,
             maxStake: 2000 * 10 ** 18,
-            stakeDuration: 364 days,
+            stakeDuration:  364 days,
             rewardDuration: 7 days,
             apy: 650,
             isActive: true
@@ -487,7 +487,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
             Stake({
                 amount: _amount,
                 lastRewardAt: block.timestamp,
-                lockUntil: block.timestamp + scheme.stakeDuration,
+                startTime: block.timestamp,
                 schemeId: _schemeId,
                 isActive: true,
                 stakeIndex: stakeIndex
@@ -514,11 +514,11 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         if (!userStake.isActive) return 0;
 
         uint256 timeStaked;
-        if (userStake.lockUntil > block.timestamp)
+        if (userStake.startTime + scheme.stakeDuration > block.timestamp)
             timeStaked = block.timestamp - userStake.lastRewardAt;
-        else timeStaked = userStake.lockUntil - userStake.lastRewardAt;
+        else timeStaked = userStake.startTime + scheme.stakeDuration - userStake.lastRewardAt;
 
-        if (timeStaked < scheme.stakeDuration) return 0;
+        if (timeStaked < scheme.rewardDuration) return 0;
 
         uint256 periods = timeStaked / scheme.rewardDuration;
         uint256 reward = (userStake.amount * scheme.apy * periods) /
@@ -537,9 +537,10 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         Stake storage userStake = userStakes[msg.sender][_schemeId][
             _stakeIndex
         ];
+        StakingScheme storage scheme = schemes[_schemeId];
         require(userStake.isActive, "No active stake");
         require(
-            userStake.lockUntil <= block.timestamp,
+            userStake.startTime + scheme.stakeDuration <= block.timestamp,
             "Stake duration not met"
         );
 
