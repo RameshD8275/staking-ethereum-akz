@@ -412,7 +412,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Reward Amount:
                           </span>
                           <span className="text-white font-medium">
-                            {Number(rewardData[index]).toFixed(4)? Number(rewardData[index]).toFixed(4) : 0} AKZ
+                            {rewardData[index] && Number(rewardData[index]).toFixed(4)? Number(rewardData[index]).toFixed(4) : 0} AKZ
                           </span>
                         </div>
                         <div className='flex justify-between'>
