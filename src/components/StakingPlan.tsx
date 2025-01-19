@@ -68,14 +68,14 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
     const tempContract = [] as any[];
     const tempUser = userStakesData as any[] || [];
     tempUser.map((stake: any, index: number) => {
-      if (stake.isActive) {
+      // if (stake.isActive) {
         tempContract.push({
           address: STAKING_CONTRACT_ADDRESS,
           abi: STAKING_ABI,
           functionName: 'calculateReward',
           args: address ? [address, BigInt(schemeId), BigInt(index)] : undefined,
         });
-      }
+      // }
     });
     setRewardContract(tempContract)
     setUserStakes(tempUser)
@@ -412,7 +412,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Reward Amount:
                           </span>
                           <span className="text-white font-medium">
-                            {rewardData[index] && Number(rewardData[index]).toFixed(4)? Number(rewardData[index]).toFixed(4) : 0} AKZ
+                            {Number(rewardData[index]).toFixed(4)} AKZ
                           </span>
                         </div>
                         <div className='flex justify-between'>
