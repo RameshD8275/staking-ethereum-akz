@@ -1,2 +1,0 @@
-TToken : 0x4ed3a5Cd4280B38B7e53D80aA4117eE498e37977
-Staking: https://sepolia.etherscan.io/address/0xd08b84d4E2b514E0a1CB32Ae5c67522256543E0B#code
