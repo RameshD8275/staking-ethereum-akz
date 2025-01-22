@@ -1,7 +1,6 @@
 
 const { ethers, run, network } = require("hardhat");
 const hreconfig = require('hardhat-configs');
-// const hreconfig = require("@nomicsfoundation/hardhat-config");
 const { sleep } = require('sleep-ts');
 
 const verify = async (address, parameter = []) => {

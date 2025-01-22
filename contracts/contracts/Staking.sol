@@ -348,12 +348,15 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         uint256 schemeId;
         bool isActive;
         uint256 stakeIndex;
+        uint256 accumulatedReward;
     }
 
     mapping(uint256 => StakingScheme) public schemes;
     mapping(address => mapping(uint256 => Stake[])) public userStakes;
     mapping(address => mapping(uint256 => uint256))
         public totalUserStakesByScheme;
+    mapping(address => mapping(uint256 => uint256)) public totalClaimedRewards;
+
     uint256 public schemeCount = 4;
 
     event SchemeCreated(
@@ -395,7 +398,7 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         schemes[2] = StakingScheme({
             minStake: 1001 * 10 ** 18,
             maxStake: 2000 * 10 ** 18,
-            stakeDuration:  364 days,
+            stakeDuration: 364 days,
             rewardDuration: 7 days,
             apy: 650,
             isActive: true
@@ -490,7 +493,8 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
                 startTime: block.timestamp,
                 schemeId: _schemeId,
                 isActive: true,
-                stakeIndex: stakeIndex
+                stakeIndex: stakeIndex,
+                accumulatedReward: 0
             })
         );
 
@@ -513,7 +517,9 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
 
         if (!userStake.isActive) return 0;
 
-        uint256 reward = (userStake.amount * scheme.apy * _getRepeatNumberOfPeriods(_user, _schemeId, _stakeIndex)) /
+        uint256 reward = (userStake.amount *
+            scheme.apy *
+            _getRepeatNumberOfPeriods(_user, _schemeId, _stakeIndex)) /
             ((100 * 10 * 365 days) / scheme.rewardDuration);
         return reward;
     }
@@ -557,8 +563,9 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         );
 
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
-        
+
         uint256 totalAmount = userStake.amount + reward;
+        totalClaimedRewards[msg.sender][_schemeId] += reward;
 
         userStake.lastRewardAt = scheme.stakeDuration + userStake.startTime;
         userStake.isActive = false;
@@ -592,16 +599,23 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         ];
         StakingScheme storage scheme = schemes[_schemeId];
         require(userStake.isActive, "No active stake");
-        require(userStake.lastRewardAt != scheme.stakeDuration + userStake.startTime, "Staking Period has expired");
         require(
-            (block.timestamp - userStake.lastRewardAt) >
-                scheme.rewardDuration,
+            userStake.lastRewardAt !=
+                scheme.stakeDuration + userStake.startTime,
+            "Staking Period has expired"
+        );
+        require(
+            (block.timestamp - userStake.lastRewardAt) > scheme.rewardDuration,
             "Reward duration not met"
         );
 
         uint256 reward = calculateReward(msg.sender, _schemeId, _stakeIndex);
         require(reward > 0, "Not Enough reward");
-        userStake.lastRewardAt += _getRepeatNumberOfPeriods(msg.sender, _schemeId, _stakeIndex) * scheme.rewardDuration;
+        userStake.lastRewardAt +=
+            _getRepeatNumberOfPeriods(msg.sender, _schemeId, _stakeIndex) *
+            scheme.rewardDuration;
+        totalClaimedRewards[msg.sender][_schemeId] += reward;
+        userStake.accumulatedReward += reward;
 
         require(stakingToken.transfer(msg.sender, reward), "Transfer failed");
 
@@ -654,5 +668,12 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
 
     function withdrawTokens(uint256 _amount) external onlyOwner {
         require(stakingToken.transfer(owner(), _amount), "Transfer failed");
+    }
+
+    function getTotalClaimedRewards(
+        address _user,
+        uint256 _schemeId
+    ) external view returns (uint256) {
+        return totalClaimedRewards[_user][_schemeId];
     }
 }

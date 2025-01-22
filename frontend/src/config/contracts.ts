@@ -1,4 +1,4 @@
-export const STAKING_CONTRACT_ADDRESS = "0x9F15089fb864d3a02D6e2e6b4772003cB570758F";
+export const STAKING_CONTRACT_ADDRESS = "0x82def716Dfa7Fc07c1eb3AdC88af458550984921";
 export const TOKEN_CONTRACT_ADDRESS = "0xaa2663C73cda62b543356c3Dc7DDAC387856ca27";
 
 export const TOKEN_ABI = [
@@ -760,6 +760,30 @@ export const STAKING_ABI = [
         "type": "uint256"
       }
     ],
+    "name": "getTotalClaimedRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_schemeId",
+        "type": "uint256"
+      }
+    ],
     "name": "getTotalStaked",
     "outputs": [
       {
@@ -816,6 +840,11 @@ export const STAKING_ABI = [
           {
             "internalType": "uint256",
             "name": "stakeIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "accumulatedReward",
             "type": "uint256"
           }
         ],
@@ -1004,6 +1033,30 @@ export const STAKING_ABI = [
         "type": "uint256"
       }
     ],
+    "name": "totalClaimedRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "totalUserStakesByScheme",
     "outputs": [
       {
@@ -1088,6 +1141,11 @@ export const STAKING_ABI = [
       {
         "internalType": "uint256",
         "name": "stakeIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accumulatedReward",
         "type": "uint256"
       }
     ],

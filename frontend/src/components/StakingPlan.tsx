@@ -420,7 +420,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Unstake Time:
                           </span>
                           <span className="text-white font-medium">
-                            {convertTimestamp(Number(stake.startTime) + 3600, 'unstake')}  
+                            {convertTimestamp(Number(stake.startTime) + 600, 'unstake')}  
                           </span>
                         </div>
                         <div className='flex justify-between'>
@@ -428,7 +428,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Claim Time:
                           </span>
                           <span className="text-white font-medium">
-                            {(Number(stake.lastRewardAt) < Number(stake.startTime) + 3600) ? convertTimestamp(Number(stake.lastRewardAt) + 600, 'claim') : "can't claim"}
+                            {(Number(stake.lastRewardAt) < Number(stake.startTime) + 600) ? convertTimestamp(Number(stake.lastRewardAt) + 60, 'claim') : "can't claim"}
                           </span>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 justify-between gap-2 mt-2'>

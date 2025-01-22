@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
-  // const [activeTab, setActiveTab] = useState('stake');
+  const [activeTab, setActiveTab] = useState('stake');
 
   const stakingPlans = [
     {
@@ -91,7 +91,7 @@ function App() {
 
         <StakingStats />
 
-        {/* <div className="flex justify-center mb-8 space-x-4">
+        <div className="flex justify-center mb-8 space-x-4">
           <button
             onClick={() => setActiveTab('stake')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
@@ -118,10 +118,10 @@ function App() {
               Rewards History
             </div>
           </button>
-        </div> */}
+        </div>
 
-        {/* {activeTab === 'stake' ? ( */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {activeTab === 'stake' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stakingPlans.map((plan, index) => (
               <StakingPlan 
                 key={index} 
@@ -130,6 +130,9 @@ function App() {
               />
             ))}
           </div>
+        ) : (
+          <RewardsHistory />
+        )}
       </div>
     </div>
   );
