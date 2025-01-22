@@ -365,7 +365,6 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                       type="number"
                       value={amount}
                       onChange={handleAmountChange}
-                      dir='rtl'
                       placeholder="Enter amount to stake"
                       className="w-full px-4 py-3 bg-navy-700/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all duration-200"
                     />

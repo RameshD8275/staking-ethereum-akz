@@ -85,30 +85,34 @@ const StakingStats = () => {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-      <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+      <div className="bg-navy-800/50 flex rounded-xl justify-between p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Coins className="text-amber-400" />
           </div>
           <h3 className="text-lg font-semibold text-white">Total Staked</h3>
         </div>
+        <div className='flex items-center mb-2'>
         <p className="text-2xl font-bold text-white">{totalStaked} AKZ</p>
         <p className="text-sm text-gray-400 mt-1">≈ ${(totalStaked * 0.1).toFixed(2)} USD</p>
+        </div>
       </div>
 
-      <div className="bg-navy-800/50 rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      <div className="bg-navy-800/50 rounded-xl p-6 border flex justify-between border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Percent className="text-amber-400" />
           </div>
           <h3 className="text-lg font-semibold text-white">Total Rewards</h3>
         </div>
+        <div className='grid grid-col-1'>
         <p className="text-2xl font-bold text-white">{totalReward.toFixed(4)} AKZ</p>
         <p className="text-sm text-gray-400 mt-1">Lifetime earnings</p>
+        </div>
       </div>
 
-      <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      {/* <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Clock className="text-amber-400" />
@@ -128,7 +132,7 @@ const StakingStats = () => {
         </div>
         <p className="text-2xl font-bold text-white">Up to 120%</p>
         <p className="text-sm text-gray-400 mt-1">Annual percentage yield</p>
-      </div>
+      </div> */}
     </div>
   );
 };
