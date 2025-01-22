@@ -101,7 +101,7 @@ const RewardsHistory = () => {
   return (
     <div className="space-y-6">
       {/* Total Rewards Summary */}
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50">
+      <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="p-3 bg-amber-500/10 rounded-lg">
@@ -121,7 +121,7 @@ const RewardsHistory = () => {
       </div>
 
       {/* Rewards History List */}
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl border border-navy-700/50 overflow-hidden">
+      <div className="bg-navy-800/50 rounded-xl border border-navy-700/50 overflow-hidden">
         <div className="p-6 border-b border-navy-700">
           <h2 className="text-xl font-bold text-white">Rewards History</h2>
         </div>

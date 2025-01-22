@@ -299,7 +299,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   }
 
   return (
-    <div className="relative bg-navy-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-navy-700/50 transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10">
+    <div className="relative bg-navy-800/50  rounded-xl overflow-hidden border border-navy-700/50 transform hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10">
       <div className={`p-6 bg-gradient-to-r ${theme}`}>
         <h3 className="text-2xl font-bold text-white mb-2">{name}</h3>
         <div className="flex items-center text-white/80">

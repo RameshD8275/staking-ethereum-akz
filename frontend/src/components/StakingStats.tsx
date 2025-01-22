@@ -86,7 +86,7 @@ const StakingStats = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Coins className="text-amber-400" />
@@ -97,7 +97,7 @@ const StakingStats = () => {
         <p className="text-sm text-gray-400 mt-1">≈ ${(totalStaked * 0.1).toFixed(2)} USD</p>
       </div>
 
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      <div className="bg-navy-800/50 rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Percent className="text-amber-400" />
@@ -108,7 +108,7 @@ const StakingStats = () => {
         <p className="text-sm text-gray-400 mt-1">Lifetime earnings</p>
       </div>
 
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      <div className="bg-navy-800/50  rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Clock className="text-amber-400" />
@@ -119,7 +119,7 @@ const StakingStats = () => {
         <p className="text-sm text-gray-400 mt-1">Check individual plans</p>
       </div>
 
-      <div className="bg-navy-800/50 backdrop-blur-sm rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
+      <div className="bg-navy-800/50 rounded-xl p-6 border border-navy-700/50 transform hover:scale-105 transition-all duration-200">
         <div className="flex items-center mb-2">
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <TrendingUp className="text-amber-400" />
