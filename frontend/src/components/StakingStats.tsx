@@ -95,7 +95,7 @@ const StakingStats = () => {
         </div>
         <div className='flex items-center mb-2'>
         <p className="text-2xl font-bold text-white">{totalStaked} AKZ</p>
-        <p className="text-sm text-gray-400 mt-1">≈ ${(totalStaked * 0.1).toFixed(2)} USD</p>
+        {/* <p className="text-sm text-gray-400 mt-1">≈ ${(totalStaked * 0.1).toFixed(2)} USD</p> */}
         </div>
       </div>
 
@@ -104,7 +104,7 @@ const StakingStats = () => {
           <div className="p-2 bg-amber-500/10 rounded-lg mr-3">
             <Percent className="text-amber-400" />
           </div>
-          <h3 className="text-lg font-semibold text-white">Total Rewards</h3>
+          <h3 className="text-lg font-semibold text-white">Claimable Rewards</h3>
         </div>
         <div className='grid grid-col-1'>
         <p className="text-2xl font-bold text-white">{totalReward.toFixed(4)} AKZ</p>

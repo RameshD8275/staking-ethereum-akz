@@ -14,7 +14,7 @@ function App() {
   const stakingPlans = [
     {
       name: 'Bronze Staking Plan',
-      range: '100 AKZ - 1000 AKZ',
+      range: '100 AKZ - 500 AKZ',
       bonus: '0.15%',
       period: 'Daily',
       duration: '52 weeks',
@@ -22,33 +22,33 @@ function App() {
       theme: 'from-amber-600 to-amber-800',
       borderColor: 'border-amber-500',
       minStake: 100,
-      maxStake: 1000,
+      maxStake: 500,
       schemeId: 1
     },
     {
       name: 'Silver Staking Plan',
-      range: '1001 AKZ - 2000 AKZ',
+      range: '501 AKZ - 1000 AKZ',
       bonus: '1.25%',
       period: 'Weekly',
       duration: '52 weeks',
       totalBonus: '65%',
       theme: 'from-blue-600 to-blue-800',
       borderColor: 'border-blue-500',
-      minStake: 1001,
-      maxStake: 2000,
+      minStake: 501,
+      maxStake: 1000,
       schemeId: 2
     },
     {
       name: 'Gold Staking Plan',
-      range: '2001 AKZ - 5000 AKZ',
+      range: '1001 AKZ - 2000 AKZ',
       bonus: '3%',
       period: 'Bi-Weekly(15 days)',
       duration: '52 weeks',
       totalBonus: '72%',
       theme: 'from-amber-500 to-yellow-600',
       borderColor: 'border-yellow-500',
-      minStake: 2001,
-      maxStake: 5000,
+      minStake: 1001,
+      maxStake: 2000,
       schemeId: 3
     },
     {

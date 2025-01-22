@@ -389,23 +389,23 @@ contract Staking is Ownable, ReentrancyGuard, Pausable {
         stakingToken = IERC20(_stakingToken);
         schemes[1] = StakingScheme({
             minStake: 100 * 10 ** 18,
-            maxStake: 1000 * 10 ** 18,
+            maxStake: 500 * 10 ** 18,
             stakeDuration: 364 days,
             rewardDuration: 1 days,
             apy: 546,
             isActive: true
         });
         schemes[2] = StakingScheme({
-            minStake: 1001 * 10 ** 18,
-            maxStake: 2000 * 10 ** 18,
+            minStake: 501 * 10 ** 18,
+            maxStake: 1000 * 10 ** 18,
             stakeDuration: 364 days,
             rewardDuration: 7 days,
             apy: 650,
             isActive: true
         });
         schemes[3] = StakingScheme({
-            minStake: 2001 * 10 ** 18,
-            maxStake: 5000 * 10 ** 18,
+            minStake: 1001 * 10 ** 18,
+            maxStake: 2000 * 10 ** 18,
             stakeDuration: 364 days,
             rewardDuration: 15 days,
             apy: 720,

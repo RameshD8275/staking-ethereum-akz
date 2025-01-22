@@ -234,15 +234,15 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
   function getRewardPeriodInDays(duration: string): number {
     switch (duration) {
       case 'Daily':
-        return 1;
+        return 1*3600*24;
       case 'Weekly':
-        return 7;
+        return 7*3600*24;
       case 'Bi-Weekly(15 days)':
-        return 15;
+        return 15*3600*24;
       case 'Monthly':
-        return 30;
+        return 30*3600*24;
       default:
-        return 1;
+        return 1*3600*24;
     }
   }
 
@@ -347,7 +347,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <Sparkles className="w-5 h-5 text-amber-400 mr-2" />
-                    <span className="text-gray-400">Total Reward:</span>
+                    <span className="text-gray-400">Claimable Reward:</span>
                   </div>
                   <span className="text-white font-bold">{Number(totalReward).toFixed(4)} AKZ</span>
                 </div>
@@ -419,7 +419,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Unstake Time:
                           </span>
                           <span className="text-white font-medium">
-                            {convertTimestamp(Number(stake.startTime) + 600, 'unstake')}  
+                            {convertTimestamp(Number(stake.startTime) + 364*3600*24, 'unstake')}  
                           </span>
                         </div>
                         <div className='flex justify-between'>
@@ -427,7 +427,7 @@ const StakingPlan: React.FC<StakingPlanProps> = ({
                             Claim Time:
                           </span>
                           <span className="text-white font-medium">
-                            {(Number(stake.lastRewardAt) < Number(stake.startTime) + 600) ? convertTimestamp(Number(stake.lastRewardAt) + 60, 'claim') : "can't claim"}
+                            {(Number(stake.lastRewardAt) < Number(stake.startTime) + 364*3600*24) ? convertTimestamp(Number(stake.lastRewardAt) + getRewardPeriodInDays(period), 'claim') : "can't claim"}
                           </span>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 justify-between gap-2 mt-2'>

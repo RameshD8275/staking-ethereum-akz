@@ -126,8 +126,12 @@ module.exports = {
   sourcify: {
     enabled: true
   },
-  defaultNetwork: "sepolia",
+  defaultNetwork: "ethereum",
   networks: {
+    ethereum:{
+      url: "https://ethereum-rpc.publicnode.com",
+      accounts: [process.env.PRIVATE_KEY]
+    },
     hardhat: {
       chainId: 31337
     },
